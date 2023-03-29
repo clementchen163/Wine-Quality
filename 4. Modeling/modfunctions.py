@@ -4,6 +4,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import pickle
 from sklearn.preprocessing import RobustScaler
 from sklearn.model_selection import train_test_split, GridSearchCV, KFold, StratifiedKFold, RandomizedSearchCV
 from sklearn.pipeline import Pipeline
@@ -12,7 +13,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from scipy.stats import randint, uniform
-
 
 def train_model_GridSearch(X_train, y_train, steps, parameters):
     '''
