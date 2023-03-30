@@ -25,8 +25,3 @@ def scale_data(df, y, dropped=[]):
     data[y]=response
     data[dropped]=drop
     return data
-    
-
-
-
-

@@ -85,9 +85,8 @@ def record_results(model_name, cv, X_test, y_test):
     y_prob=cv.predict_proba(X_test)[:,1]
     f1=f1_score(y_test,y_pred, average='binary', pos_label='high')
     test_acc=accuracy_score(y_test,y_pred)
-    best_score=cv.best_score_
     roc=roc_auc_score(y_test, y_prob)
-    return [model_name, f1, test_acc, best_score, roc]
+    return [model_name, f1, test_acc, roc]
 
 def export_file(export_path, file_name, data):
     '''
