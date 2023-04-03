@@ -2,26 +2,38 @@
 # coding: utf-8
 import pandas as pd
 from sklearn.preprocessing import RobustScaler, MinMaxScaler
-
-def scale_data(df, y, dropped=[]):
+from sklearn.model_selection import train_test_split
+def scale_data(df, y):
     '''
-    Scales data and reconstructs dataframe with response variable and any non scalable columns
+    Does train test split and scales data
     ---Parameters---
     df (pandas DataFrame) data with response variable
     y (str) name of column with response variable
-    dropped (list of str) list of the names of any other columns to be dropped before scaling
     ---Returns---
-    data (pandas DataFrame) reconstructed dataframe
+    train, test (pandas DataFrames) reconstructed train and test dataframes
     '''
     response=df[y]
-    X=df.drop([y]+dropped, axis=1)
+    X=df.drop(y, axis=1)
+    
+    X_train, X_test, y_train, y_test=train_test_split(X, response, test_size=.2,random_state=123)
     X_columns=X.columns
-    drop = df[dropped]
+    
+    X_train_index=X_train.index
+    X_test_index=X_test.index
+    
     robust_transformer = RobustScaler()
-    X=robust_transformer.fit_transform(X ,response)
     minmax_transformer=MinMaxScaler()
-    X=minmax_transformer.fit_transform(X,response)
-    data=pd.DataFrame(X, columns=X_columns)
-    data[y]=response
-    data[dropped]=drop
-    return data
+    
+    X_train=robust_transformer.fit_transform(X_train)
+    X_test=robust_transformer.transform(X_test)
+    
+    X_train=minmax_transformer.fit_transform(X_train)
+    X_test=minmax_transformer.transform(X_test)
+    
+    train=pd.DataFrame(X_train, columns=X_columns, index=X_train_index)
+    train[y]=y_train
+    
+    test=pd.DataFrame(X_test, columns=X_columns, index=X_test_index)
+    test[y]=y_test
+    
+    return train, test
