@@ -4,7 +4,7 @@
 
 Wine consumption is prevalent across multiple cultures. Here we examine the red and white wines from the vinho verde region of Portugal. To support the growth of the wine market, a way to qualify wine quality is needed to ensure consistency, and to potentially discover niche markets in order to diversify sales. The goal of this analysis is to model wine quality (sensory data) based on physicochemical attributes on the wine. A better understanding of the compents that make up high wine quality could aid in reproducability. This inforamtion would mostly be useful for wine experts and food scientists.
 
-## 1. Data
+## 0. Data
 ---
 
 The dataset is from the Viticulture Commission of the Vinho Verde region (CVRVV) and contains two wine data sets from the vinho verde region of north portugal. One data set is for red wine with 1599 samples and one for white wine with 4898 samples. Each sample is for one wine and includes objective laboratory tests such as density or alchohol content as well as a quality rating from 0(bad) to 10(fantastic) obtained from the median score of at least 3 wine experts. The dataset and asscociated datamining paper are linked below. 
@@ -17,7 +17,7 @@ The dataset is from the Viticulture Commission of the Vinho Verde region (CVRVV)
 
 ![Wine features](Images/wine_feature_units_table_1.png)
 
-## 2. Data Wrangling
+## 1. Data Wrangling
 ---
 [Data Wrangling Report](https://github.com/clementchen163/Wine-Quality/blob/main/1.%20Data%20Wrangling/Wine%20Quality%20Data%20Wrangling.ipynb)
 
@@ -27,7 +27,7 @@ The dataset was already very clean, there were no null values or datatype incons
 
 With 1177 rows of duplicated data, deciding what to do with them is not trivial. Of the features we have, none are categorical and with the exception of pH, all are continuous. This makes me believe that if the data collection process is robust, it is very unlikely that two unique wine samples coincidently have the same feature values. Could it be that these duplicates are the same wine samples but have had multiple different people evaluate its quality? According to the data source: "the output is based on sensory data (median of at least 3 evaluations made by wine experts)". This lets us conclude that the duplicates are true duplicates and should be removed prior to modeling.
 
-## 3. EDA
+## 2. EDA
 ---
 [EDA Report](https://github.com/clementchen163/Wine-Quality/blob/main/2.%20EDA/Wine%20Quality%20EDA.ipynb)
 
@@ -51,7 +51,7 @@ Some features appear to be highly correlated to each other. Depending on the mac
 
 ![residual sugar vs density](Images/residual_sugar_vs_density.png)
 
-## 4. Preprocessing
+## 3. Preprocessing
 ---
 [Preprocessing Report](https://github.com/clementchen163/Wine-Quality/blob/main/3.%20Preprocessing/Wine%20Quality%20preprocessing.ipynb)
 
@@ -69,7 +69,7 @@ Looking at how our features are distributed, we can see that none are normally d
 
 Because the main business objective we are concerned with is seperating low quality and high quality wines, I decided to bin our quality variable into 'low' and 'high' bins for qualities ranging from 0-6 and 7-10 respectively. This will allow for for more a rigid separation of poor and high quality wines. 
 
-## 5. Modeling
+## 4. Modeling
 ---
 [Modeling Report](https://github.com/clementchen163/Wine-Quality/blob/main/4.%20Modeling/Wine%20Quality%20Modeling.ipynb)
 
@@ -98,3 +98,47 @@ on both red and white wine datasets for a total of 8 models. All models optimize
 Fitted models were saved using python's pickle library
 
 [Fitted Models for Future Predictions](https://github.com/clementchen163/Wine-Quality/tree/main/4.%20Modeling/Model%20Metrics)
+
+## 5. Conclusions and Future Research
+---
+[Conclusions Report](https://github.com/clementchen163/Wine-Quality/blob/main/5.%20Conclusions%20and%20Future%20Research/Wine%20Quality%20Conclusions.ipynb)
+
+* The dataset is made of many duplicates which have been classified as true duplicates and removed prior to modeling
+* The red wines tend to have lower quality than the white wines
+* The five most important features in determining red wine quality was 
+citric acid, density, alcohol, sulphates, and volatile acidity
+* The five most important features in determing white wine quality was
+alcohol, density, chlorides, total sulfur dioxide, and residual sugars
+
+![red wine GBT feature importance](Images/Red_Wine_GBT.png)
+
+![white wine RF feature importance](Images/White_Wine_RF.png)
+
+#### Future Research
+
+Apply other machine learning algorithms such as:
+* Neural Net
+* Support Vector Machine
+---
+
+Acquired more detailed data with more features:
+* Wine Color
+* Wine Price
+* Wine Name
+* Carbonic Acid Levels (carbonation)
+* Cask or Bottle Fermented
+---
+
+Adjust problem statement: 
+
+* With wine prices, it would be possible to create a regression model for wine price instead of trying to classify wine quality.
+---
+
+More robust labeling techniques of sensory data:
+
+* Wine quality would be judged from the median of more than 3 wine tasters possibly from different regions or from markets with different palettes. 
+---
+
+Focus on improving red wines:
+
+* White wines had proportionally 30% more high quality wines than high quality red wines. Efforts could be directed to improving red wine performance. 
