@@ -9,7 +9,7 @@ import pickle
 from sklearn.preprocessing import RobustScaler
 from sklearn.model_selection import train_test_split, GridSearchCV, KFold, StratifiedKFold, RandomizedSearchCV
 from sklearn.pipeline import Pipeline
-from sklearn.metrics import f1_score, roc_curve, roc_auc_score, accuracy_score
+from sklearn.metrics import f1_score, roc_curve, roc_auc_score, accuracy_score, recall_score, precision_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
@@ -26,6 +26,39 @@ def binning(data):
     ranges=[0,6,10]
     group_names=[0, 1]
     data['quality_bin']=pd.cut(data['quality'], bins=ranges, labels=group_names)
+    return None  
+
+def threshold_chart(cv, X_train, y_train):
+    '''
+    Plots a thresholding chart with precision, recall, and f1 score
+    ---Parameters---
+    cv (sklearn classifier) fitted classifier
+    X_train (pandas DataFrame) training data features
+    y_train (pandas Series) training data labels
+    ---Returns---
+    None
+    '''
+    df=pd.DataFrame()
+    df['true class labels']=y_train
+    df['positive class prob']=cv.predict_proba(X_train)[:,1]
+    df.sort_values(by='positive class prob', ascending=True, inplace=True, ignore_index=True)
+    f1=[]
+    precision=[]
+    recall=[]
+    for value in df['positive class prob']:
+        df['threshold class']= df['positive class prob'] >= value
+        y_pred=df['threshold class']
+        y_tests=df['true class labels']
+        f1.append(f1_score(y_tests, y_pred, average='binary'))
+        precision.append(precision_score(y_tests, y_pred))
+        recall.append(recall_score(y_tests,y_pred))
+    df['f1']=f1
+    df['precision']=precision
+    df['recall']=recall
+    ax = df.plot(x='positive class prob', y=['f1', 'precision','recall'],figsize=(15,9), xticks=np.arange(0,1,.1))
+    ax.set_xlabel('Threshold')
+    ax.set_title('Precision-Recall vs. Threshold')
+    ax.legend(loc = 'lower left')
     return None
 
 def plot_feature_importance(importance, names, model_name):
@@ -74,7 +107,7 @@ def train_model_GridSearch(X_train, y_train, steps, parameters):
     '''
     pipe=Pipeline(steps)
     kf=KFold(n_splits=5, shuffle=True, random_state=123)
-    cv=GridSearchCV(pipe,param_grid=parameters,cv=kf,scoring='roc_auc')
+    cv=GridSearchCV(pipe,param_grid=parameters,cv=kf,scoring='roc_auc', n_jobs=-1)
     cv.fit(X_train,y_train)
     return cv
 
@@ -91,7 +124,7 @@ def train_model_RandomizedSearch(X_train, y_train, steps, parameters):
     '''
     pipe=Pipeline(steps)
     kf=KFold(n_splits=5, shuffle=True, random_state=123)
-    cv=RandomizedSearchCV(pipe, param_distributions=parameters, cv=kf, scoring='roc_auc', n_iter=50, random_state=123)
+    cv=RandomizedSearchCV(pipe, param_distributions=parameters, cv=kf, scoring='roc_auc', n_iter=50, random_state=123, n_jobs=-1)
     cv.fit(X_train,y_train)
     return cv
 
@@ -117,7 +150,7 @@ def plot_roc(cv, X_test, y_test):
     plt.show()
     return None
 
-def record_results(model_name, cv, X_test, y_test):
+def record_results(model_name, cv, X_test, y_test, threshold):
     '''
     Records metrics for given classifier
     ---Parameters---
@@ -125,15 +158,18 @@ def record_results(model_name, cv, X_test, y_test):
     cv (sklearn classifier) fitted classifier
     X_test (pandas DataFrame) test features
     y_test (pandas Series) test target classes
+    threshold (float) probability threshold for positive class
     ---Returns---
     list of metrics for classifier 
     '''
-    y_pred=cv.predict(X_test)
+    y_pred=(cv.predict_proba(X_test)[:,1]>threshold).astype(int)
     y_prob=cv.predict_proba(X_test)[:,1]
     f1=f1_score(y_test,y_pred, average='binary')
     test_acc=accuracy_score(y_test,y_pred)
     roc=roc_auc_score(y_test, y_prob)
-    return [model_name, f1, test_acc, roc]
+    precision= precision_score(y_test, y_pred)
+    recall=recall_score(y_test, y_pred)
+    return [model_name, f1, test_acc, roc, precision, recall]
 
 def export_file(export_path, file_name, data):
     '''
