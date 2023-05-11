@@ -28,13 +28,14 @@ def binning(data):
     data['quality_bin']=pd.cut(data['quality'], bins=ranges, labels=group_names)
     return None  
 
-def threshold_chart(cv, X_train, y_train):
+def threshold_chart(cv, X_train, y_train, threshold=False):
     '''
     Plots a thresholding chart with precision, recall, and f1 score
     ---Parameters---
     cv (sklearn classifier) fitted classifier
     X_train (pandas DataFrame) training data features
     y_train (pandas Series) training data labels
+    threshold (boolean or float) whether to put threshold line
     ---Returns---
     None
     '''
@@ -59,6 +60,14 @@ def threshold_chart(cv, X_train, y_train):
     ax.set_xlabel('Threshold')
     ax.set_title('Precision-Recall vs. Threshold')
     ax.legend(loc = 'lower left')
+    if threshold==False:
+        pass
+    elif threshold== True:
+        ax.axvline(0.50, color='black', alpha=0.3)
+        ax.text(0.50,.65,'Default Threshold',rotation=90, alpha=0.8, fontsize=16)
+    else:
+        ax.axvline(threshold, color='black', alpha=0.3)
+        ax.text(threshold,.65,'Selected Threshold',rotation=90, alpha=0.8, fontsize=16)
     return None
 
 def plot_feature_importance(importance, names, model_name):

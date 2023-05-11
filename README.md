@@ -10,11 +10,11 @@ So who would our results matter to? Here we present two solutions for two partie
 
 #### I. Small Family Owned Winery
 ---
-A small business like this recieves most of their revenue from individuals willing to pay top dollar for high quality wines. In order to retain their clientele, this business must make certain that the wines they sell are always of top quality. One bad wine could means losing years of future profits. A business like this would be interested in a model that has high precision, that is to ensure that of all the wines labeled high quality, an overwheming majority are truely high quality thus minimizing the chance that a loyal customer would recieve a low quality wine. 
+A small business like this receives most of their revenue from individuals willing to pay top dollar for high quality wines. In order to retain their clientele, this business must make certain that the wines they sell are always of top quality. One bad wine could mean losing years of future profits. A business like this would be interested in a model that has high precision, that is to ensure that of all the wines labeled high quality, an overwhelming majority are truly high quality thus minimizing the chance that a loyal customer would receive a low quality wine. 
 
 #### II. Large Corporation Winery
 ---
-A large winery would supply wines in boxes of 6 to retailers such as Costco or Walmart. As such, they are okay if not all the wines in the boxes are of the highest quality, from internal focus group tests, they have found out that consumers buying wine in bulk are okay with some of the wines being of lower quality because of the already cheap prices. In order to not waste lower quality wines, they purposely package some lower quality wines with higher quality wines instead of getting rid of all low quality inventory. A business like this would be okay with a model that has lower precision, that is to ensure that of all the wines labeled high quality, a moderate fraction are truely high quality allowing less production loss due to rejected products. 
+A large winery would supply wines in boxes of 6 to retailers such as Costco or Walmart. As such, they are okay if not all the wines in the boxes are of the highest quality, from internal focus group tests, they have found out that consumers buying wine in bulk are okay with some of the wines being of lower quality because of the already cheap prices. In order to not waste lower quality wines, they purposely package some lower quality wines with higher quality wines instead of getting rid of all low quality inventory. A business like this would be okay with a model that has lower precision, that is to ensure that of all the wines labeled high quality, a moderate fraction are truly high quality allowing less production loss due to rejected products. 
 
 ## 0. Data
 ---
@@ -75,18 +75,6 @@ We can see on the correlation heatmap that there exists some correlation between
 
 ![correlation heatmap red](Images/correlation_heatmap_white.png)
 
-#### Scatter Plots of Correlated Features
-
-Some features appear to be highly correlated to each other. Depending on the machine learning algorithm used, multicollinearity could be an issue.
-
-![scatter plot of free sulfur dioxide vs total sulfur dioxide](Images/free_vs_total_sulfur_dioxide.png)
-
-![density vs alcohol](Images/density_vs_alcohol.png)
-
-![residual suagr vs density](Images/residual_suagr_vs_density.png)
-
-![fixed acidity vs density](Images/fixed_acidity_vs_density.png)
-
 ## 3. Preprocessing
 ---
 [Preprocessing Report](https://github.com/clementchen163/Wine-Quality/blob/main/3.%20Preprocessing/Wine%20Quality%20preprocessing.ipynb)
@@ -124,57 +112,74 @@ For hyperparameter tuning, GridSearchCV and RandomizedSearchCV were used on Logi
 
 Red Wine: Small Business
 
-| Model Name              | f1 Score | Test Accuracy | ROC AUC | Precision | Recall |
-| :---------------------- | :------: | :-----------: | :------:| :-------: |:------:|
-| Logistic Regression     | 0.333    | 0.897         | 0.868   | 0.778     | 0.212  |
-| PCA Logistic Regression | 0.300    | 0.897         | 0.874   | 0.857     | 0.182  |
-| Random Forest           | 0.375    | 0.890         | 0.874   | 0.600     | 0.273  |
-| Gradient Boosted Tree   | 0.279    | 0.886         | 0.872   | 0.600     | 0.182  |
+| Model Name              | f1 Score | Test Accuracy | ROC AUC | Precision | Recall | Winner |
+| :---------------------- | :------: | :-----------: | :------:| :-------: |:------:|:------:|
+| Logistic Regression     | 0.333    | 0.897         | 0.868   | 0.778     | 0.212  | ❌    |
+| PCA Logistic Regression | 0.300    | 0.897         | 0.874   | 0.857     | 0.182  | ✅    |
+| Random Forest           | 0.375    | 0.890         | 0.874   | 0.600     | 0.273  | ❌    |
+| Gradient Boosted Tree   | 0.279    | 0.886         | 0.872   | 0.600     | 0.182  | ❌    |
 
 Red Wine: Large Winery
 
-| Model Name              | f1 Score | Test Accuracy | ROC AUC | Precision | Recall |
-| :---------------------- | :------: | :-----------: | :------:| :-------: |:------:|
-| Logistic Regression     | 0.361    | 0.857         | 0.868   | 0.393     | 0.333  |
-| PCA Logistic Regression | 0.414    | 0.875         | 0.874   | 0.480     | 0.364  |
-| Random Forest           | 0.495    | 0.820         | 0.874   | 0.375     | 0.727  |
-| Gradient Boosted Tree   | 0.537    | 0.860         | 0.872   | 0.449     | 0.667  |
+| Model Name              | f1 Score | Test Accuracy | ROC AUC | Precision | Recall | Winner |
+| :---------------------- | :------: | :-----------: | :------:| :-------: |:------:| :----: |
+| Logistic Regression     | 0.361    | 0.857         | 0.868   | 0.393     | 0.333  | ❌    |
+| PCA Logistic Regression | 0.414    | 0.875         | 0.874   | 0.480     | 0.364  | ❌    |
+| Random Forest           | 0.495    | 0.820         | 0.874   | 0.375     | 0.727  | ❌    |
+| Gradient Boosted Tree   | 0.537    | 0.860         | 0.872   | 0.449     | 0.667  | ✅    |
 
 White Wine: Small Business
 
-| Model Name              | f1 Score | Test Accuracy | ROC AUC | Precision | Recall |
-| :---------------------- | :------: | :-----------: | :------:| :-------: |:------:|
-| Logistic Regression     | 0.203    | 0.802         | 0.832   | 0.833     | 0.116  |
-| PCA Logistic Regression | 0.203    | 0.802         | 0.832   | 0.833     | 0.116  |
-| Random Forest           | 0.494    | 0.835         | 0.865   | 0.744     | 0.370  |
-| Gradient Boosted Tree   | 0.540    | 0.832         | 0.846   | 0.672     | 0.451  |
+| Model Name              | f1 Score | Test Accuracy | ROC AUC | Precision | Recall | Winner |
+| :---------------------- | :------: | :-----------: | :------:| :-------: |:------:| :----: |
+| Logistic Regression     | 0.203    | 0.802         | 0.832   | 0.833     | 0.116  | ✅tied |
+| PCA Logistic Regression | 0.203    | 0.802         | 0.832   | 0.833     | 0.116  | ✅tied |
+| Random Forest           | 0.494    | 0.835         | 0.865   | 0.744     | 0.370  | ❌     |
+| Gradient Boosted Tree   | 0.540    | 0.832         | 0.846   | 0.672     | 0.451  | ❌     |
 
 White Wine: Large Winery
 
-| Model Name              | f1 Score | Test Accuracy | ROC AUC | Precision | Recall |
-| :---------------------- | :------: | :-----------: | :------:| :-------: |:------:|
-| Logistic Regression     | 0.398    | 0.821         | 0.832   | 0.746     | 0.272  |
-| PCA Logistic Regression | 0.398    | 0.817         | 0.832   | 0.706     | 0.277  |
-| Random Forest           | 0.552    | 0.687         | 0.865   | 0.402     | 0.884  |
-| Gradient Boosted Tree   | 0.546    | 0.813         | 0.846   | 0.582     | 0.514  |
+| Model Name              | f1 Score | Test Accuracy | ROC AUC | Precision | Recall | Winner |
+| :---------------------- | :------: | :-----------: | :------:| :-------: |:------:| :----: |
+| Logistic Regression     | 0.398    | 0.821         | 0.832   | 0.746     | 0.272  | ❌    |
+| PCA Logistic Regression | 0.398    | 0.817         | 0.832   | 0.706     | 0.277  | ❌    |
+| Random Forest           | 0.552    | 0.687         | 0.865   | 0.402     | 0.884  | ❌    |
+| Gradient Boosted Tree   | 0.546    | 0.813         | 0.846   | 0.582     | 0.514  | ✅    |
 
 **Winning Models**
 
 ---
+
+
 ##### Red Wine case 1 : Small Business
 PCA Logistic Regression, threshold for high quality wine at 0.58
 
 ---
+![feature importance](Images/pca_red_winning_small_business.png)
+![thresholding chart](Images/Red_Wine_PCA_LR.png)
+
 ##### Red Wine case 2 : Large Winery
 Gradient Boosted Tree, threshold for high quality wine at 0.26
 
 ---
+![feature importance](Images/GBT_red_winning_large_winery.png)
+![thresholding chart](Images/Red_Wine_GBT.png)
+
+
 ##### White Wine case 1 : Small Business
 Logistic Regression/PCA Logistic Regression, threshold for high quality wine at 0.65
 
 ---
+![feature importance](Images/LR_white_winning_small_business.png)
+![thresholding chart](Images/White_Wine_LR.png)
+
+
 ##### White Wine case 2 : Large Winery
 Gradient Boosted Tree, threshold for high quality wine at 0.40
+
+---
+![feature importance](Images/GBT_white_winning_large_winery.png)
+![thresholding chart](Images/White_Wine_GBT.png)
 
 #### Fitted Models
 
@@ -182,9 +187,15 @@ Fitted models were saved using python's pickle library
 
 [Fitted Models for Future Predictions](https://github.com/clementchen163/Wine-Quality/tree/main/4.%20Modeling/Model%20Metrics)
 
-## 5.  Future Research
+## 5. Conclusions and Future Research
 ---
-[Future Research Report](https://github.com/clementchen163/Wine-Quality/blob/main/5.%20Future%20Research/Wine%20Quality%20Future%20Research.ipynb)
+[Conclusions and Future Research Report](https://github.com/clementchen163/Wine-Quality/blob/main/5.%20Future%20Research/Wine%20Quality%20Future%20Research.ipynb)
+
+#### Conclusion
+
+In summary, for our binary classification task of differentiating low and high quality wines, we have trained 4 machine learning algorithms on each of the red and white wine datasets. For each model, we selected a probability threshold depending on one of two business cases: small family owned wine shop, or a large corperate winery. The results of our analysis would be important to owners of small businesses or R&D departments at corperate wineries looking to maximize sales. These models can be useful by ensuring that only high quality wines find their way to loyal high paying customers or by reducing number of recalled wines without affecting sales. It also provides a way to quantify wine quality using physicochemical properties of the wine instead of using human tasters. 
+
+#### Ideas for Future Research
 
 Apply other machine learning algorithms such as:
 * Neural Net
